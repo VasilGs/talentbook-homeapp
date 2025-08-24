@@ -339,6 +339,12 @@ export function Pricing({
                   if (plan.name === 'Pro' && plan.userType === 'job_seeker' && onOpenSignupModal) {
                     onOpenSignupModal();
                   }
+                  if (plan.name === 'STARTER' && plan.userType === 'employer' && onOpenSignupModal) {
+                    onOpenSignupModal();
+                  }
+                  if (plan.name === 'GROWTH' && plan.userType === 'employer' && onOpenSignupModal) {
+                    onOpenSignupModal();
+                  }
                 }}
                 className={cn(
                   buttonVariants({
