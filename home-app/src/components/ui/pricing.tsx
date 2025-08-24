@@ -41,11 +41,13 @@ const defaultJobSeekerPlans: PricingPlan[] = [
     yearlyPrice: "0",
     period: "forever",
     features: [
-      "Browse and apply to all listings",
+      "View and apply to all job postings",
       "Saved searches + email/push notifications",
-      "Public profile/portfolio"
+      "Public profile/portfolio",
+      "Basic job matching",
+      "Standard application process"
     ],
-    description: "Perfect for professionals looking for their next opportunity",
+    description: "Perfect for professionals starting their job search",
     buttonText: "Get Started Free",
     href: "#",
     isPopular: false,
@@ -57,13 +59,13 @@ const defaultJobSeekerPlans: PricingPlan[] = [
     yearlyPrice: "99",
     period: "month",
     features: [
-      "Profile Boost (higher in searches): up to 5 boosts/month",
+      "Everything in Basic",
+      "Profile Boost (higher in search results): up to 5 boosts/month",
       "Top of the stack when applying: 3 priority highlights/week",
       "Advanced filters (salary, remote, tech stack, etc.)",
-      "\"Who viewed me" + read receipts on messages",
-      "Up to 20 direct messages (InMails) to employers/month (cap: 10/day)",
-      "CV/cover letter templates + AI optimization tips",
-      "One-off monetization (optional): Spotlight Boost — €4.99 / 48 hours extra visibility"
+      "\"Who viewed me\" + read receipts on messages",
+      "Up to 20 direct messages (InMails) to employers/month",
+      "CV/cover letter templates + AI tips for optimization"
     ],
     description: "Advanced features for serious job seekers",
     buttonText: "Upgrade to Pro",
