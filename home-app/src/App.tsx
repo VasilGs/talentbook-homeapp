@@ -570,4 +570,10 @@ export default function App() {
       />
     </div>
   )
+  interface SignupData {
+  name: string;
+  email: string;
+  password: string;
+  userType: 'job_seeker' | 'company';
+}
 }
