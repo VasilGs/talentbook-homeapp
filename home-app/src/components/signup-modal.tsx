@@ -17,9 +17,10 @@ interface SignupModalProps {
   onClose: () => void
   onSwitchToLogin: () => void
   onOpenPrivacyTerms: () => void
+  onSignupSuccess: (signupData: SignupData) => void
 }
 
-export function SignupModal({ isOpen, onClose, onSwitchToLogin, onOpenPrivacyTerms }: SignupModalProps) {
+export function SignupModal({ isOpen, onClose, onSwitchToLogin, onOpenPrivacyTerms, onSignupSuccess }: SignupModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,9 +52,16 @@ export function SignupModal({ isOpen, onClose, onSwitchToLogin, onOpenPrivacyTer
         return
       }
 
-      // Reset form and close modal on success
+      // Call the success callback with signup data
+      onSignupSuccess({
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        userType: formData.userType
+      })
+      
+      // Reset form
       setFormData({ name: '', email: '', password: '', userType: 'job_seeker' })
-      onClose()
     } catch (err) {
       setError('An unexpected error occurred. Please try again.')
     } finally {

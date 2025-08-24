@@ -717,7 +717,7 @@ export default function App() {
         onClose={() => setIsSignupModalOpen(false)}
         onSwitchToLogin={() => setIsLoginModalOpen(true)}
         onOpenPrivacyTerms={() => setIsPrivacyTermsModalOpen(true)}
-        onContinueSignup={handleContinueSignup} // <-- REQUIRED to trigger completion flow
+        onSignupSuccess={handleContinueSignup}
       />
       <LoginModal
         isOpen={isLoginModalOpen}
