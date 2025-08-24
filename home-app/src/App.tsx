@@ -19,6 +19,13 @@ export default function App() {
   const [charIndex, setCharIndex] = useState(0)
   const [isDeleting, setIsDeleting] = useState(false)
   const [showCursor, setShowCursor] = useState(true)
+  interface SignupData {
+  name: string;
+  email: string;
+  password: string;
+  userType: 'job_seeker' | 'company';
+}
+
 
   // --- UI state ---
   const [isSignupModalOpen, setIsSignupModalOpen] = useState(false)
@@ -570,11 +577,5 @@ export default function App() {
       />
     </div>
   )
-  interface SignupData {
-  name: string;
-  email: string;
-  password: string;
-  userType: 'job_seeker' | 'company';
-}
-
+  
 }
