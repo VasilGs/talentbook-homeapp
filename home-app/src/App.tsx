@@ -7,6 +7,10 @@ import { SignupModal } from './components/signup-modal'
 import { LoginModal } from './components/login-modal'
 import { PrivacyTermsModal } from './components/PrivacyTermsModal'
 import { supabase, type User } from './lib/supabase'
+import { JobSeekerProfileCompletion } from './components/JobSeekerProfileCompletion';
+import { CompanyProfileCompletion } from './components/CompanyProfileCompletion';
+import type { User } from './lib/supabase';
+
 
 export default function App() {
   // --- typewriter placeholder state ---
