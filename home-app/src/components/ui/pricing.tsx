@@ -60,7 +60,7 @@ const defaultJobSeekerPlans: PricingPlan[] = [
       "Profile Boost (higher in searches): up to 5 boosts/month",
       "Top of the stack when applying: 3 priority highlights/week",
       "Advanced filters (salary, remote, tech stack, etc.)",
-      ""Who viewed me" + read receipts on messages",
+      "\"Who viewed me" + read receipts on messages",
       "Up to 20 direct messages (InMails) to employers/month (cap: 10/day)",
       "CV/cover letter templates + AI optimization tips",
       "One-off monetization (optional): Spotlight Boost — €4.99 / 48 hours extra visibility"
