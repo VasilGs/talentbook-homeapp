@@ -1,182 +1,287 @@
 import React, { useState } from 'react'
-import { X } from 'lucide-react'
+import { Modal } from './ui/modal'
+import { Button } from './ui/button'
+import { Label } from './ui/label'
+import { User, Mail, Lock, Sparkles, Briefcase, Building2 } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
-type UserType = 'job_seeker' | 'company'
-
-export interface SignupData {
+interface SignupData {
   name: string
   email: string
   password: string
-  userType: UserType
+  userType: 'job_seeker' | 'company'
 }
 
 interface SignupModalProps {
   isOpen: boolean
   onClose: () => void
   onSwitchToLogin: () => void
+  onContinueSignup: (signupData: SignupData) => void
   onOpenPrivacyTerms: () => void
-  // 👇 This is what App.tsx listens for to redirect to the right completion screen
-  onContinueSignup?: (data: SignupData) => void
 }
 
-export const SignupModal: React.FC<SignupModalProps> = ({
-  isOpen,
-  onClose,
-  onSwitchToLogin,
-  onOpenPrivacyTerms,
-  onContinueSignup,
-}) => {
-  if (!isOpen) return null
+export function SignupModal({ isOpen, onClose, onSwitchToLogin, onContinueSignup, onOpenPrivacyTerms }: SignupModalProps) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    userType: 'job_seeker' as 'job_seeker' | 'company'
+  })
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  // 👇 the choice from “I am looking to:”
-  const [intent, setIntent] = useState<UserType>('job_seeker') // default to job seeker
-
-  const handleCreateAccount = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Don’t sign up here — pass data to App.tsx so it can show the correct completion page
-    onContinueSignup?.({
-      name,
-      email,
-      password,
-      userType: intent, // 'job_seeker' or 'company'
+    setError(null)
+
+    // Pass signup data to parent component
+    onContinueSignup({
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      userType: formData.userType
     })
+    
+    // Reset form and close modal
+    setFormData({ name: '', email: '', password: '', userType: 'job_seeker' })
+    onClose()
   }
 
-  const OptionCard: React.FC<{
-    active: boolean
-    label: string
-    description: string
-    onClick: () => void
-  }> = ({ active, label, description, onClick }) => (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={[
-        'w-full text-left p-4 rounded-xl border transition-all duration-200',
-        active
-          ? 'border-[#FFC107] bg-white/10'
-          : 'border-white/15 hover:border-white/30 hover:bg-white/5',
-      ].join(' ')}
-    >
-      <div className="text-white font-semibold">{label}</div>
-      <div className="text-sm text-gray-300 mt-1">{description}</div>
-    </button>
-  )
+  const handleInputChange = (field: string, value: string | 'job_seeker' | 'company') => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }))
+  }
+
+  const handleSwitchToLogin = () => {
+    onClose()
+    onSwitchToLogin()
+  }
+
+  const handleUserTypeChange = (type: 'job_seeker' | 'company') => {
+    setFormData(prev => ({
+      ...prev,
+      userType: type
+    }))
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* backdrop */}
-      <div className="absolute inset-0 bg-black/60" onClick={onClose} />
-
-      {/* modal */}
-      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-neutral-900 border border-white/10 p-6 shadow-2xl">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-semibold text-white">Create your account</h3>
-          <button
-            className="p-2 rounded-lg hover:bg-white/10 text-white/80"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <X className="h-5 w-5" />
-          </button>
+    <Modal isOpen={isOpen} onClose={onClose} className="bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-800 border border-white/20">
+      <div className="p-8">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden">
+            <img 
+              src="/talent book singular icon.png" 
+              alt="TalentBook Icon" 
+              className="w-full h-full object-contain"
+            />
+          </div>
+          <h2 className="text-2xl font-bold text-white mb-2 font-poppins">
+            Join TalentBook
+          </h2>
+          <p className="text-gray-300">
+            Create your free account and start finding your perfect match
+          </p>
+          
+          {/* Error Message */}
+          {error && (
+            <div className="mt-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
         </div>
 
-        <form onSubmit={handleCreateAccount} className="space-y-5">
-          {/* I am looking to: */}
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* User Type Selection */}
           <div>
-            <label className="block text-sm text-gray-300 mb-2">I am looking to:</label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <OptionCard
-                active={intent === 'job_seeker'}
-                label="Find a job"
-                description="Create a profile and match with roles"
-                onClick={() => setIntent('job_seeker')}
-              />
-              <OptionCard
-                active={intent === 'company'}
-                label="Hire talent"
-                description="Create a company profile and post jobs"
-                onClick={() => setIntent('company')}
+            <Label className="block text-sm font-medium text-gray-300 mb-3">
+              I am looking to:
+            </Label>
+            <div className="grid grid-cols-2 gap-3">
+              {/* Job Seeker Option */}
+              <button
+                type="button"
+                onClick={() => handleUserTypeChange('job_seeker')}
+                className={`relative p-4 rounded-xl border-2 transition-all duration-200 group ${
+                  formData.userType === 'job_seeker'
+                    ? 'border-[#FFC107] bg-[#FFC107]/10'
+                    : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
+                }`}
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
+                    formData.userType === 'job_seeker'
+                      ? 'bg-[#FFC107] text-black'
+                      : 'bg-white/10 text-gray-400 group-hover:text-white'
+                  }`}>
+                    <Briefcase className="w-5 h-5" />
+                  </div>
+                  <span className={`text-sm font-medium transition-colors duration-200 ${
+                    formData.userType === 'job_seeker'
+                      ? 'text-[#FFC107]'
+                      : 'text-gray-300 group-hover:text-white'
+                  }`}>
+                    Find a Job
+                  </span>
+                </div>
+                {formData.userType === 'job_seeker' && (
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#FFC107] rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-black rounded-full"></div>
+                  </div>
+                )}
+              </button>
+
+              {/* Company Option */}
+              <button
+                type="button"
+                onClick={() => handleUserTypeChange('company')}
+                className={`relative p-4 rounded-xl border-2 transition-all duration-200 group ${
+                  formData.userType === 'company'
+                    ? 'border-[#FFC107] bg-[#FFC107]/10'
+                    : 'border-white/20 bg-white/5 hover:border-white/40 hover:bg-white/10'
+                }`}
+              >
+                <div className="flex flex-col items-center space-y-2">
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors duration-200 ${
+                    formData.userType === 'company'
+                      ? 'bg-[#FFC107] text-black'
+                      : 'bg-white/10 text-gray-400 group-hover:text-white'
+                  }`}>
+                    <Building2 className="w-5 h-5" />
+                  </div>
+                  <span className={`text-sm font-medium transition-colors duration-200 ${
+                    formData.userType === 'company'
+                      ? 'text-[#FFC107]'
+                      : 'text-gray-300 group-hover:text-white'
+                  }`}>
+                    Hire Talent
+                  </span>
+                </div>
+                {formData.userType === 'company' && (
+                  <div className="absolute -top-1 -right-1 w-5 h-5 bg-[#FFC107] rounded-full flex items-center justify-center">
+                    <div className="w-2 h-2 bg-black rounded-full"></div>
+                  </div>
+                )}
+              </button>
+            </div>
+          </div>
+          {/* Name Field */}
+          <div>
+            <Label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+              Full Name
+            </Label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-500" />
+              </div>
+              <input
+                type="text"
+                id="name"
+                required
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                placeholder="Enter your full name"
               />
             </div>
           </div>
 
-          {/* Name */}
+          {/* Email Field */}
           <div>
-            <label className="block text-sm text-gray-300 mb-2">Full name</label>
-            <input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600"
-              placeholder="Jane Doe"
-              autoComplete="name"
-              required
-            />
+            <Label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+              Email Address
+            </Label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Mail className="h-5 w-5 text-gray-500" />
+              </div>
+              <input
+                type="email"
+                id="email"
+                required
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                placeholder="Enter your email address"
+              />
+            </div>
           </div>
 
-          {/* Email */}
+          {/* Password Field */}
           <div>
-            <label className="block text-sm text-gray-300 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600"
-              placeholder="jane@example.com"
-              autoComplete="email"
-              required
-            />
+            <Label htmlFor="password" className="block text-sm font-medium text-gray-300 mb-2">
+              Password
+            </Label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Lock className="h-5 w-5 text-gray-500" />
+              </div>
+              <input
+                type="password"
+                id="password"
+                required
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                className="w-full pl-10 pr-4 py-3 bg-white/10 border border-white/20 rounded-lg focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all duration-200 text-white placeholder-gray-400"
+                placeholder="Create a secure password"
+              />
+            </div>
           </div>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm text-gray-300 mb-2">Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-red-600"
-              placeholder="••••••••"
-              autoComplete="new-password"
-              required
-              minLength={6}
-            />
-          </div>
-
-          {/* TOS */}
-          <p className="text-xs text-gray-400">
-            By creating an account, you agree to our{' '}
-            <button
-              type="button"
-              className="text-[#FFC107] underline underline-offset-2"
-              onClick={onOpenPrivacyTerms}
-            >
-              Privacy Policy and Terms of Use
-            </button>.
-          </p>
-
-          {/* Actions */}
-          <div className="space-y-3">
-            <button
-              type="submit"
-              className="w-full bg-[#FFC107] hover:bg-[#FFB300] text-black px-6 py-3 rounded-lg font-semibold transition-all duration-200"
-            >
-              Create account
-            </button>
-            <button
-              type="button"
-              onClick={onSwitchToLogin}
-              className="w-full bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200"
-            >
-              I already have an account
-            </button>
-          </div>
+          {/* Submit Button */}
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#FFC107] hover:bg-[#FFB300] text-black py-3 rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-[#FFC107]/25"
+          >
+            {loading ? 'Creating Account...' : 'Create Free Account'}
+          </Button>
         </form>
+
+        {/* Footer */}
+        <div className="mt-6 text-center">
+          <p className="text-sm text-gray-400">
+            Already have an account?{' '}
+            <button
+              onClick={handleSwitchToLogin}
+              className="text-[#FFC107] hover:text-[#FFB300] font-medium transition-colors duration-200"
+            >
+              Log in instead
+            </button>
+          </p>
+        </div>
+
+        {/* Terms */}
+        <div className="mt-4 text-center">
+          <p className="text-xs text-gray-500">
+            By creating an account, you agree to our{' '}
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenPrivacyTerms();
+              }}
+              className="text-[#FFC107] hover:text-[#FFB300] transition-colors duration-200 underline"
+            >
+              Terms of Service
+            </button>{' '}
+            and{' '}
+            <button 
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                onOpenPrivacyTerms();
+              }}
+              className="text-[#FFC107] hover:text-[#FFB300] transition-colors duration-200 underline"
+            >
+              Privacy Policy
+            </button>
+          </p>
+        </div>
       </div>
-    </div>
+    </Modal>
   )
 }
