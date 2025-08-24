@@ -408,100 +408,121 @@ export default function App() {
       </section>
 
       {/* Pricing (copied config from main app) */}
-      <section id="pricing" className="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 -mt-8">
-        <Pricing
-          title="Choose Your Plan"
-          description="Find the perfect plan for your needs. Whether you're a job seeker or employer, we have options that scale with you."
-          plans={[
-            {
-              name: 'JOB SEEKER',
-              price: '0',
-              yearlyPrice: '0',
-              period: 'forever',
-              features: [
-                'Unlimited job applications',
-                'AI-powered profile creation',
-                'Smart job matching',
-                'Direct messaging with employers',
-                'Mobile app access',
-                'Basic analytics',
-              ],
-              description: 'Perfect for professionals looking for their next opportunity',
-              buttonText: 'Get Started Free',
-              href: '/sign-up',
-              isPopular: false,
-              userType: 'job_seeker',
-            },
-            {
-              name: 'STARTER',
-              price: '600',
-              yearlyPrice: '480',
-              period: 'month',
-              features: [
-                '3 active job posts simultaneously',
-                '1 recruiter seat',
-                'Up to 50 profile views/month',
-                '200 connection invites/month',
-                'Email support (48h SLA)',
-                '7 days free trial',
-                'One-time mini-package option available',
-              ],
-              description: 'Perfect for small companies starting their hiring journey',
-              buttonText: 'Start 7-Day Free Trial',
-              href: '/sign-up',
-              isPopular: false,
-              userType: 'employer',
-            },
-            {
-              name: 'GROWTH',
-              price: '1500',
-              yearlyPrice: '1200',
-              period: 'month',
-              features: [
-                '6 active job posts',
-                'Silver promotion included (€500 value)',
-                '200 InMails/month included (€1,000 value)',
-                '3 recruiter seats',
-                'Up to 300 profile views/month',
-                '1,000 connection invites/month',
-                'Email + chat support (24h SLA)',
-                '10% discount on additional packages',
-              ],
-              description: 'Ideal for growing companies and HR teams',
-              buttonText: 'Start Free Trial',
-              href: '/sign-up',
-              isPopular: true,
-              userType: 'employer',
-            },
-            {
-              name: 'SCALE (UNLIMITED)',
-              price: '5000',
-              yearlyPrice: '5000',
-              period: 'year',
-              features: [
-                'Unlimited job posts (up to 25 active)',
-                '5 recruiter seats',
-                'Advanced search + shortlist export',
-                'Dedicated account manager',
-                '25% discount on promo packages',
-                'Annual promotion bundle available',
-                'Priority support (4h SLA)',
-                'Quarterly business reviews',
-              ],
-              description: 'For large organizations with specific requirements',
-              buttonText: 'Contact Sales',
-              href: '/contact',
-              isPopular: false,
-              userType: 'employer',
-            },
-          ]}
-        />
+<section id="pricing" className="relative bg-gradient-to-br from-neutral-900 via-neutral-800 to-neutral-900 -mt-8">
+  <Pricing
+    title="Choose Your Plan"
+    description="Find the perfect plan for your needs. Whether you're a job seeker or employer, we have options that scale with you."
+    plans={[
+      // --- Job Seeker plans (updated) ---
+      {
+        name: 'BASIC',
+        price: '0',
+        yearlyPrice: '0',
+        period: 'forever',
+        features: [
+          'Browse and apply to all listings',
+          'Saved searches + email/push notifications',
+          'Public profile/portfolio',
+        ],
+        description: 'Everything you need to start applying',
+        buttonText: 'Get Started Free',
+        href: '/sign-up',
+        isPopular: false,
+        userType: 'job_seeker',
+      },
+      {
+        name: 'PRO',
+        price: '12',
+        yearlyPrice: '99',
+        period: 'month',
+        features: [
+          'Profile Boost (higher in searches): up to 5 boosts/month',
+          'Top of the stack when applying: 3 priority highlights/week',
+          'Advanced filters (salary, remote, tech stack, etc.)',
+          '“Who viewed me” + read receipts on messages',
+          'Up to 20 direct messages (InMails) to employers/month (cap: 10/day)',
+          'CV/cover letter templates + AI optimization tips',
+          'One-off monetization (optional): Spotlight Boost — €4.99 / 48 hours extra visibility',
+        ],
+        description: 'Priority visibility, filters, and messaging power',
+        buttonText: 'Upgrade to Pro',
+        href: '/sign-up',
+        isPopular: true,
+        userType: 'job_seeker',
+      },
 
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#FFC107]/5 rounded-full blur-3xl"></div>
-        </div>
-      </section>
+      // --- Employer plans (unchanged) ---
+      {
+        name: 'STARTER',
+        price: '600',
+        yearlyPrice: '480',
+        period: 'month',
+        features: [
+          '3 active job posts simultaneously',
+          '1 recruiter seat',
+          'Up to 50 profile views/month',
+          '200 connection invites/month',
+          'Email support (48h SLA)',
+          '7 days free trial',
+          'One-time mini-package option available',
+        ],
+        description: 'Perfect for small companies starting their hiring journey',
+        buttonText: 'Start 7-Day Free Trial',
+        href: '/sign-up',
+        isPopular: false,
+        userType: 'employer',
+      },
+      {
+        name: 'GROWTH',
+        price: '1500',
+        yearlyPrice: '1200',
+        period: 'month',
+        features: [
+          '6 active job posts',
+          'Silver promotion included (€500 value)',
+          '200 InMails/month included (€1,000 value)',
+          '3 recruiter seats',
+          'Up to 300 profile views/month',
+          '1,000 connection invites/month',
+          'Email + chat support (24h SLA)',
+          '10% discount on additional packages',
+        ],
+        description: 'Ideal for growing companies and HR teams',
+        buttonText: 'Start Free Trial',
+        href: '/sign-up',
+        isPopular: true,
+        userType: 'employer',
+      },
+      {
+        name: 'SCALE (UNLIMITED)',
+        price: '5000',
+        yearlyPrice: '5000',
+        period: 'year',
+        features: [
+          'Unlimited job posts (up to 25 active)',
+          '5 recruiter seats',
+          'Advanced search + shortlist export',
+          'Dedicated account manager',
+          '25% discount on promo packages',
+          'Annual promotion bundle available',
+          'Priority support (4h SLA)',
+          'Quarterly business reviews',
+        ],
+        description: 'For large organizations with specific requirements',
+        buttonText: 'Contact Sales',
+        href: '/contact',
+        isPopular: false,
+        userType: 'employer',
+      },
+    ]}
+  />
+
+  {/* Background Elements */}
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-red-600/5 rounded-full blur-3xl"></div>
+    <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#FFC107]/5 rounded-full blur-3xl"></div>
+  </div>
+</section>
 
       {/* Contact (copied structure from main app) */}
       <section id="contact" className="relative bg-gradient-to-br from-neutral-800 via-neutral-900 to-neutral-800 py-16 lg:py-24">
