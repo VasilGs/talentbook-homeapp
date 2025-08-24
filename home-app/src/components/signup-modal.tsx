@@ -16,11 +16,10 @@ interface SignupModalProps {
   isOpen: boolean
   onClose: () => void
   onSwitchToLogin: () => void
-  onContinueSignup: (signupData: SignupData) => void
   onOpenPrivacyTerms: () => void
 }
 
-export function SignupModal({ isOpen, onClose, onSwitchToLogin, onContinueSignup, onOpenPrivacyTerms }: SignupModalProps) {
+export function SignupModal({ isOpen, onClose, onSwitchToLogin, onOpenPrivacyTerms }: SignupModalProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -32,19 +31,34 @@ export function SignupModal({ isOpen, onClose, onSwitchToLogin, onContinueSignup
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
     setError(null)
 
-    // Pass signup data to parent component
-    onContinueSignup({
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      userType: formData.userType
-    })
-    
-    // Reset form and close modal
-    setFormData({ name: '', email: '', password: '', userType: 'job_seeker' })
-    onClose()
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            full_name: formData.name,
+            user_type: formData.userType
+          }
+        }
+      })
+
+      if (error) {
+        setError(error.message)
+        return
+      }
+
+      // Reset form and close modal on success
+      setFormData({ name: '', email: '', password: '', userType: 'job_seeker' })
+      onClose()
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleInputChange = (field: string, value: string | 'job_seeker' | 'company') => {
