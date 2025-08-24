@@ -5,7 +5,7 @@ import { Label } from './ui/label'
 import { User, Mail, Lock, Sparkles, Briefcase, Building2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
-// at top of signup-modal.tsx
+
 type UserType = 'job_seeker' | 'company'
 
 export interface SignupData {
@@ -21,21 +21,6 @@ interface SignupModalProps {
   onSwitchToLogin: () => void
   onOpenPrivacyTerms: () => void
   onContinueSignup?: (data: SignupData) => void   // ⬅️ add this
-}
-
-interface SignupData {
-  name: string
-  email: string
-  password: string
-  userType: 'job_seeker' | 'company'
-}
-
-interface SignupModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onSwitchToLogin: () => void
-  onOpenPrivacyTerms: () => void
-  onSignupSuccess: (signupData: SignupData) => void
 }
 
 export function SignupModal({ isOpen, onClose, onSwitchToLogin, onOpenPrivacyTerms, onSignupSuccess }: SignupModalProps) {
