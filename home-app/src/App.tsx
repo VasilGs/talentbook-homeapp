@@ -454,7 +454,7 @@ export default function App() {
               userType: 'employer',
             },
             {
-              name: 'SCALE (UNLIMITED)",
+              name: 'SCALE (UNLIMITED)',
               price: '5000',
               yearlyPrice: '5000',
               period: 'year',
