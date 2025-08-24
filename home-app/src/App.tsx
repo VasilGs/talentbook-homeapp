@@ -576,4 +576,5 @@ export default function App() {
   password: string;
   userType: 'job_seeker' | 'company';
 }
+
 }
