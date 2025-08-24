@@ -31,6 +31,7 @@ interface PricingProps {
   title?: string;
   description?: string;
   onViewAddOns?: () => void;
+  onOpenSignupModal?: () => void;
 }
 
 // Default job seeker plans
@@ -142,6 +143,7 @@ export function Pricing({
   title = "Simple, Transparent Pricing",
   description = "Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support.",
   onViewAddOns,
+  onOpenSignupModal,
 }: PricingProps) {
   const [isMonthly, setIsMonthly] = useState(true);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -330,6 +332,11 @@ export function Pricing({
               <hr className="w-full my-6 border-white/20" />
 
               <button
+                onClick={() => {
+                  if (plan.name === 'Basic' && plan.userType === 'job_seeker' && onOpenSignupModal) {
+                    onOpenSignupModal();
+                  }
+                }}
                 className={cn(
                   buttonVariants({
                     variant: "outline",

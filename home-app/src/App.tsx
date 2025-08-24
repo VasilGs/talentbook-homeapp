@@ -412,6 +412,7 @@ export default function App() {
   <Pricing
     title="Choose Your Plan"
     description="Find the perfect plan for your needs. Whether you're a job seeker or employer, we have options that scale with you."
+    onOpenSignupModal={() => setIsSignupModalOpen(true)}
     plans={[
       // --- Job Seeker plans (updated) ---
       {
