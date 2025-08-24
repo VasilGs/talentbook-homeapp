@@ -5,19 +5,21 @@ import { Label } from './ui/label'
 import { User, Mail, Lock, Sparkles, Briefcase, Building2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 
-interface SignupData {
+type UserType = 'job_seeker' | 'company'
+
+export interface SignupData {
   name: string
   email: string
   password: string
-  userType: 'job_seeker' | 'company'
+  userType: UserType
 }
 
 interface SignupModalProps {
   isOpen: boolean
   onClose: () => void
   onSwitchToLogin: () => void
-  onContinueSignup: (signupData: SignupData) => void
   onOpenPrivacyTerms: () => void
+  onContinueSignup?: (data: SignupData) => void   // ⬅️ add this
 }
 
 export function SignupModal({ isOpen, onClose, onSwitchToLogin, onContinueSignup, onOpenPrivacyTerms }: SignupModalProps) {
