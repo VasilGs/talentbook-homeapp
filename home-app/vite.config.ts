@@ -9,6 +9,9 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+    build: {
+    chunkSizeWarningLimit: 2000, // kB
+  },
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
