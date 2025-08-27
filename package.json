@@ -2,4 +2,7 @@
   "dependencies": {
     "lucide-react": "^0.541.0"
   }
+  "scripts": {
+  "build": "your-build-command-here"
+  }
 }
